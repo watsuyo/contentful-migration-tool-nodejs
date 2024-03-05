@@ -36,7 +36,8 @@ commandLine.question("Input your management token: ", (managementToken) => {
           const latestFile = latest[0].file;
           console.log(`Exported: ${latestFile}`);
           const exportedData = fs.readJsonSync(`./exported/${latestFile}`);
-          commandLine.question("Input the space ID you want to migrate to: ",
+          commandLine.question(
+            "Input the space ID you want to migrate to: ",
             (spaceId) => {
               console.log("Importing...");
               const options = {
@@ -48,17 +49,22 @@ commandLine.question("Input your management token: ", (managementToken) => {
               contentfulImport(options)
                 .then((result) => {
                   console.log("Imported!");
+                  commandLine.close();
                 })
                 .catch((error) => {
-                  console.log("Oh no! Some error occurred!", error.errors[0].error);
+                  console.log(
+                    "Oh no! Some error occurred!",
+                    error.errors[0].error
+                  );
+                  commandLine.close();
                 });
-            });
+            }
+          );
         })
         .catch((error) => {
           console.log("Oh no! Some error occurred!", error.errors[0].error);
+          commandLine.close();
         });
-
-      commandLine.close();
     }
   );
 });
